@@ -413,6 +413,7 @@ func (s *Swarm) dialNextAddr(ctx context.Context, p peer.ID, addr ma.Multiaddr, 
 	}
 
 	// start the dial
+	fmt.Printf("%s %s dial next addr to %s\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString(), p.ShortString())
 	s.limitedDial(ctx, p, addr, resch)
 
 	return nil

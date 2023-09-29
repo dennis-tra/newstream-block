@@ -109,11 +109,9 @@ func (w *dialWorker) loop() {
 	defer w.wg.Done()
 	defer w.s.limiter.clearAllPeerDials(w.peer)
 
-	fmt.Printf("%s                     dial worker loop start to %s\n", time.Now().Format(time.RFC3339Nano), w.peer)
-
+	fmt.Printf("%s                     dial worker loop start to %s\n", time.Now().Format(time.RFC3339Nano), w.peer.ShortString())
 	defer func() {
-
-		fmt.Printf("%s                     dial worker loop stop to %s\n", time.Now().Format(time.RFC3339Nano), w.peer)
+		fmt.Printf("%s                     dial worker loop stop to %s\n", time.Now().Format(time.RFC3339Nano), w.peer.ShortString())
 	}()
 
 	// dq is used to pace dials to different addresses of the peer
@@ -156,6 +154,7 @@ loop:
 
 		select {
 		case req, ok := <-w.reqch:
+			fmt.Printf("%s                     dial worker handling dial request to %s\n", time.Now().Format(time.RFC3339Nano), w.peer.ShortString())
 			if !ok {
 				if w.s.metricsTracer != nil {
 					w.s.metricsTracer.DialCompleted(w.connected, totalDials)
@@ -168,6 +167,7 @@ loop:
 			// track dials to the addresses relevant to this request.
 
 			c := w.s.bestAcceptableConnToPeer(req.ctx, w.peer)
+			fmt.Printf("%s                     dial worker best acceptable connection %v to %s\n", time.Now().Format(time.RFC3339Nano), c != nil, w.peer.ShortString())
 			if c != nil {
 				req.resch <- dialResponse{conn: c}
 				continue loop
@@ -276,6 +276,7 @@ loop:
 			scheduleNextDial()
 
 		case <-dialTimer.Ch():
+			fmt.Printf("%s                     dial worker dialTimer to %s\n", time.Now().Format(time.RFC3339Nano), w.peer.ShortString())
 			// It's time to dial the next batch of addresses.
 			// We don't check the delay of the addresses received from the queue here
 			// because if the timer triggered before the delay, it means that all
@@ -307,6 +308,7 @@ loop:
 			scheduleNextDial()
 
 		case res := <-w.resch:
+			fmt.Printf("%s                     dial worker handling dial response %v to %s\n", time.Now().Format(time.RFC3339Nano), res.Conn != nil, w.peer.ShortString())
 			// A dial to an address has completed.
 			// Update all requests waiting on this address. On success, complete the request.
 			// On error, record the error
