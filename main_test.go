@@ -33,8 +33,8 @@ func TestListenCloseCount3(t *testing.T) {
 		t.Run(fmt.Sprintf("[%d]", i), func(t *testing.T) {
 			h1 := newHost(t)
 			h2 := newHost(t)
-			fmt.Println(time.Now().Format(time.RFC3339Nano)+" H1:", h1.ID())
-			fmt.Println(time.Now().Format(time.RFC3339Nano)+" H2:", h2.ID())
+			fmt.Println(time.Now().Format(time.RFC3339Nano)+" H1:", h1.ID(), h1.Addrs())
+			fmt.Println(time.Now().Format(time.RFC3339Nano)+" H2:", h2.ID(), h1.Addrs())
 
 			h1.Network().Notify(&network.NotifyBundle{
 				ListenF: func(n network.Network, multiaddr ma.Multiaddr) {

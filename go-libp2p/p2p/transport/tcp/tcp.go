@@ -78,7 +78,9 @@ type tcpListener struct {
 }
 
 func (ll *tcpListener) Accept() (manet.Conn, error) {
+	fmt.Println(time.Now().Format(time.RFC3339Nano)+" accepting new connections", ll.Multiaddr())
 	c, err := ll.Listener.Accept()
+	fmt.Println(time.Now().Format(time.RFC3339Nano)+" accepted new connections", ll.Multiaddr(), c != nil)
 	if err != nil {
 		return nil, err
 	}
