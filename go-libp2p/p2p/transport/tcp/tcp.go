@@ -3,6 +3,7 @@ package tcp
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net"
 	"os"
 	"runtime"
@@ -171,6 +172,7 @@ func (t *TcpTransport) maDial(ctx context.Context, raddr ma.Multiaddr) (manet.Co
 		return t.reuse.DialContext(ctx, raddr)
 	}
 	var d manet.Dialer
+
 	return d.DialContext(ctx, raddr)
 }
 
@@ -195,7 +197,11 @@ func (t *TcpTransport) dialWithScope(ctx context.Context, raddr ma.Multiaddr, p 
 		log.Debugw("resource manager blocked outgoing connection for peer", "peer", p, "addr", raddr, "error", err)
 		return nil, err
 	}
+
+	fmt.Printf("%s                     tcp maDial %s\n", time.Now().Format(time.RFC3339Nano), p.ShortString())
 	conn, err := t.maDial(ctx, raddr)
+	fmt.Printf("%s                     tcp maDial done %s\n", time.Now().Format(time.RFC3339Nano), p.ShortString())
+
 	if err != nil {
 		return nil, err
 	}
