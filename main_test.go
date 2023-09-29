@@ -7,6 +7,7 @@ import (
 	"github.com/libp2p/go-libp2p/core/host"
 	"github.com/libp2p/go-libp2p/core/network"
 	"github.com/libp2p/go-libp2p/core/peerstore"
+	ma "github.com/multiformats/go-multiaddr"
 	"github.com/stretchr/testify/require"
 	"sync"
 	"testing"
@@ -36,6 +37,9 @@ func TestListenCloseCount3(t *testing.T) {
 			fmt.Println(time.Now().Format(time.RFC3339Nano)+" H2:", h2.ID())
 
 			h1.Network().Notify(&network.NotifyBundle{
+				ListenF: func(n network.Network, multiaddr ma.Multiaddr) {
+					fmt.Println(time.Now().Format(time.RFC3339Nano)+" H1 started listening on:", multiaddr)
+				},
 				ConnectedF: func(n network.Network, conn network.Conn) {
 					if conn.RemotePeer() != h2.ID() {
 						panic("aahh")
@@ -45,6 +49,9 @@ func TestListenCloseCount3(t *testing.T) {
 			})
 
 			h2.Network().Notify(&network.NotifyBundle{
+				ListenF: func(n network.Network, multiaddr ma.Multiaddr) {
+					fmt.Println(time.Now().Format(time.RFC3339Nano)+" H2 started listening on:", multiaddr)
+				},
 				ConnectedF: func(n network.Network, conn network.Conn) {
 					if conn.RemotePeer() != h1.ID() {
 						panic("aahh")
