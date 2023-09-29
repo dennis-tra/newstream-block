@@ -2,6 +2,7 @@ package swarm
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"sync"
 	"time"
@@ -315,6 +316,8 @@ loop:
 
 			if res.Conn != nil {
 				// we got a connection, add it to the swarm
+
+				fmt.Printf("%s Created new connection %s", time.Now().Format(time.RFC3339Nano), w.s.LocalPeer().ShortString())
 				conn, err := w.s.addConn(res.Conn, network.DirOutbound)
 				if err != nil {
 					// oops no, we failed to add it to the swarm

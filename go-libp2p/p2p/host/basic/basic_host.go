@@ -730,6 +730,7 @@ func (h *BasicHost) Connect(ctx context.Context, pi peer.AddrInfo) error {
 		}
 	}
 
+	fmt.Printf("%s Dial Peer %s", time.Now().Format(time.RFC3339Nano), h.ID().ShortString())
 	return h.dialPeer(ctx, pi.ID)
 }
 
