@@ -11,8 +11,8 @@ import (
 	"testing"
 )
 
-func newHost(t *testing.T) host.Host {
-	listenAddr := libp2p.ListenAddrStrings("/ip4/127.0.0.1/tcp/0")
+func newHost(t *testing.T, port int) host.Host {
+	listenAddr := libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", port))
 
 	h, err := libp2p.New(listenAddr)
 	require.NoError(t, err)
@@ -28,8 +28,8 @@ func newHost(t *testing.T) host.Host {
 func TestBlock(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		t.Run(fmt.Sprintf("[%d]", i), func(t *testing.T) {
-			h1 := newHost(t)
-			h2 := newHost(t)
+			h1 := newHost(t, 2000+i)
+			h2 := newHost(t, 3000+i)
 
 			h1.Peerstore().AddAddrs(h2.ID(), h2.Addrs(), peerstore.PermanentAddrTTL)
 			h2.Peerstore().AddAddrs(h1.ID(), h1.Addrs(), peerstore.PermanentAddrTTL)
