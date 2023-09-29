@@ -262,7 +262,7 @@ func (s *Swarm) dialPeer(ctx context.Context, p peer.ID) (*Conn, error) {
 	ctx, cancel := context.WithTimeout(ctx, network.GetDialPeerTimeout(ctx))
 	defer cancel()
 
-	fmt.Printf("%s Dsync Dial %s", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
+	fmt.Printf("%s Dsync Dial %s\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
 	conn, err = s.dsync.Dial(ctx, p)
 	if err == nil {
 		// Ensure we connected to the correct peer.
