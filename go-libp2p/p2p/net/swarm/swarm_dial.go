@@ -539,7 +539,10 @@ func (s *Swarm) dialAddr(ctx context.Context, p peer.ID, addr ma.Multiaddr) (tra
 	}
 
 	start := time.Now()
+
+	fmt.Printf("%s dial address %s\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
 	connC, err := tpt.Dial(ctx, addr, p)
+	fmt.Printf("%s dialed address %s\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
 
 	// We're recording any error as a failure here.
 	// Notably, this also applies to cancelations (i.e. if another dial attempt was faster).

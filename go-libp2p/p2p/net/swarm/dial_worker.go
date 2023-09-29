@@ -109,6 +109,13 @@ func (w *dialWorker) loop() {
 	defer w.wg.Done()
 	defer w.s.limiter.clearAllPeerDials(w.peer)
 
+	fmt.Printf("%s dial worker loop start to %s\n", time.Now().Format(time.RFC3339Nano), w.peer)
+
+	defer func() {
+
+		fmt.Printf("%s dial worker loop stop to %s\n", time.Now().Format(time.RFC3339Nano), w.peer)
+	}()
+
 	// dq is used to pace dials to different addresses of the peer
 	dq := newDialQueue()
 	// dialsInFlight is the number of dials in flight.
