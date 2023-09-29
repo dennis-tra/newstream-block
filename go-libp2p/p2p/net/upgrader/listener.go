@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/libp2p/go-libp2p/core/network"
 	"github.com/libp2p/go-libp2p/core/transport"
@@ -72,7 +73,10 @@ func (l *listener) handleIncoming() {
 
 	var catcher tec.TempErrCatcher
 	for l.ctx.Err() == nil {
+
+		fmt.Printf(time.Now().Format(time.RFC3339Nano)+"                     Waiting to accept %s\n", l.Multiaddr())
 		maconn, err := l.Listener.Accept()
+		fmt.Printf(time.Now().Format(time.RFC3339Nano)+"                     Accepted! %s\n", l.Multiaddr())
 		if err != nil {
 			// Note: function may pause the accept loop.
 			if catcher.IsTemporary(err) {
@@ -119,6 +123,7 @@ func (l *listener) handleIncoming() {
 			ctx, cancel := context.WithTimeout(l.ctx, l.upgrader.acceptTimeout)
 			defer cancel()
 
+			fmt.Printf(time.Now().Format(time.RFC3339Nano)+"                     Upgrade connection... %s\n", l.Multiaddr())
 			conn, err := l.upgrader.Upgrade(ctx, l.transport, maconn, network.DirInbound, "", connScope)
 			if err != nil {
 				// Don't bother bubbling this up. We just failed
@@ -138,11 +143,14 @@ func (l *listener) handleIncoming() {
 			// *never* blocks, even if we go over the threshold. It
 			// simply ensures that calls to Wait block while we're
 			// over the threshold.
+			fmt.Printf(time.Now().Format(time.RFC3339Nano)+"                     Acquire threshold... %s\n", l.Multiaddr())
 			l.threshold.Acquire()
 			defer l.threshold.Release()
 
+			fmt.Printf(time.Now().Format(time.RFC3339Nano)+"                     sending incoming... %s\n", l.Multiaddr())
 			select {
 			case l.incoming <- conn:
+				fmt.Printf(time.Now().Format(time.RFC3339Nano)+"                     sent incoming %s\n", l.Multiaddr())
 			case <-ctx.Done():
 				if l.ctx.Err() == nil {
 					// Listener *not* closed but the accept timeout expired.
