@@ -109,11 +109,11 @@ func (w *dialWorker) loop() {
 	defer w.wg.Done()
 	defer w.s.limiter.clearAllPeerDials(w.peer)
 
-	fmt.Printf("%s dial worker loop start to %s\n", time.Now().Format(time.RFC3339Nano), w.peer)
+	fmt.Printf("%s                     dial worker loop start to %s\n", time.Now().Format(time.RFC3339Nano), w.peer)
 
 	defer func() {
 
-		fmt.Printf("%s dial worker loop stop to %s\n", time.Now().Format(time.RFC3339Nano), w.peer)
+		fmt.Printf("%s                     dial worker loop stop to %s\n", time.Now().Format(time.RFC3339Nano), w.peer)
 	}()
 
 	// dq is used to pace dials to different addresses of the peer
@@ -324,7 +324,7 @@ loop:
 			if res.Conn != nil {
 				// we got a connection, add it to the swarm
 
-				fmt.Printf("%s Created new connection %s\n", time.Now().Format(time.RFC3339Nano), w.s.LocalPeer().ShortString())
+				fmt.Printf("%s %s Created new connection\n", time.Now().Format(time.RFC3339Nano), w.s.LocalPeer().ShortString())
 				conn, err := w.s.addConn(res.Conn, network.DirOutbound)
 				if err != nil {
 					// oops no, we failed to add it to the swarm

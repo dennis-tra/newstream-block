@@ -262,7 +262,7 @@ func (s *Swarm) dialPeer(ctx context.Context, p peer.ID) (*Conn, error) {
 	ctx, cancel := context.WithTimeout(ctx, network.GetDialPeerTimeout(ctx))
 	defer cancel()
 
-	fmt.Printf("%s Dsync Dial %s\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
+	fmt.Printf("%s %s Dsync Dial\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
 	conn, err = s.dsync.Dial(ctx, p)
 	if err == nil {
 		// Ensure we connected to the correct peer.
@@ -540,9 +540,9 @@ func (s *Swarm) dialAddr(ctx context.Context, p peer.ID, addr ma.Multiaddr) (tra
 
 	start := time.Now()
 
-	fmt.Printf("%s dial address %s\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
+	fmt.Printf("%s %s dial address\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
 	connC, err := tpt.Dial(ctx, addr, p)
-	fmt.Printf("%s dialed address %s\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
+	fmt.Printf("%s %s dialed address\n", time.Now().Format(time.RFC3339Nano), s.LocalPeer().ShortString())
 
 	// We're recording any error as a failure here.
 	// Notably, this also applies to cancelations (i.e. if another dial attempt was faster).

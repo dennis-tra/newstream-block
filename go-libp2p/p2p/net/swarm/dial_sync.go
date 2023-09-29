@@ -99,10 +99,10 @@ func (ds *dialSync) Dial(ctx context.Context, p peer.ID) (*Conn, error) {
 
 	conn, err := ad.dial(ctx)
 
-	fmt.Printf("%s dial done to %s\n", time.Now().Format(time.RFC3339Nano), p.ShortString())
+	fmt.Printf("%s                     dial done to\n", time.Now().Format(time.RFC3339Nano), p.ShortString())
 	ds.mutex.Lock()
 	defer ds.mutex.Unlock()
-	fmt.Printf("%s updating refs to %s\n", time.Now().Format(time.RFC3339Nano), p.ShortString())
+	fmt.Printf("%s                     updating refs to %s\n", time.Now().Format(time.RFC3339Nano), p.ShortString())
 
 	ad.refCnt--
 	if ad.refCnt == 0 {
