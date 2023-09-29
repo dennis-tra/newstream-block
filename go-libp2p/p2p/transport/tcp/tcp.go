@@ -200,9 +200,9 @@ func (t *TcpTransport) dialWithScope(ctx context.Context, raddr ma.Multiaddr, p 
 		return nil, err
 	}
 
-	fmt.Printf("%s                     tcp maDial %s\n", time.Now().Format(time.RFC3339Nano), p.ShortString())
+	fmt.Printf("%s                     tcp maDial %s %s\n", time.Now().Format(time.RFC3339Nano), p.ShortString(), raddr)
 	conn, err := t.maDial(ctx, raddr)
-	fmt.Printf("%s                     tcp maDial done %s\n", time.Now().Format(time.RFC3339Nano), p.ShortString())
+	fmt.Printf("%s                     tcp maDial done %s %s\n", time.Now().Format(time.RFC3339Nano), p.ShortString(), raddr)
 
 	if err != nil {
 		return nil, err

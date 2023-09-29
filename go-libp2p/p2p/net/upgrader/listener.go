@@ -76,7 +76,7 @@ func (l *listener) handleIncoming() {
 
 		fmt.Printf(time.Now().Format(time.RFC3339Nano)+"                     Waiting to accept %s\n", l.Multiaddr())
 		maconn, err := l.Listener.Accept()
-		fmt.Printf(time.Now().Format(time.RFC3339Nano)+"                     Accepted! %s\n", l.Multiaddr())
+		fmt.Printf(time.Now().Format(time.RFC3339Nano)+"                     Accepted! %s err=%s\n", l.Multiaddr(), err)
 		if err != nil {
 			// Note: function may pause the accept loop.
 			if catcher.IsTemporary(err) {
